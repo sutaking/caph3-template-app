@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="caph/3.1.0/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="caph/3.1.0/bower_components/angular/angular.min.js"></script>
     <script type="text/javascript" src="caph/3.1.0/caph-angular.min.js"></script>
-    <script type="text/javascript" src="/js/app.js"></script>
+    <script type="text/javascript" src="http://109.123.120.200:9900/js/app.js"></script>
     <script type="text/javascript" src = "js/pcm-player.js"></script>	
 	
 	<script type='text/javascript' src='$WEBAPIS/webapis/webapis.js'></script>
@@ -25,15 +25,15 @@
 			<div id="add" class="box" focusable on-selected="onClick('add')">addListener</div>
 			<div id="start" class="box" focusable="{disabled: true}" on-selected="onClick('start')">start</div>
 			<div id="stop" class="box" focusable="{disabled: true}" on-selected="onClick('stop')">stop</div>
-			<div id="remove" class="box" focusable on-selected="onClick('remove')">removeListener</div>			
+			<div id="remove" class="box" focusable on-selected="onClick('remove')">removeListener</div>
+			<div id="play" class="play-box" focusable on-selected="onClick('play')">Audio</div>
+			<audio id="audio-sound" preload></audio>
 		</div>
 		<div id="result_container">
 			<div id="visualizer_wrapper">
 				<canvas id='canvas' width="1000" height="350"></canvas>				
 			</div>
 			<div id="text-log">
-				<h2>Log Result:</h2>
-				<p id="time" style="font-size: 20px;"></p>
 				<div id='result'></div>
 			</div>			
 		</div>

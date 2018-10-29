@@ -5,11 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build" :" node dev.js"
+    "build": " node dev.js",
+    "server": "http-server -p 9900 "
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.16.4",
+    "minimist": "^1.2.0",
+    "serve-static": "^1.13.2",
     "tizen-tv-dev-cli": "^0.1.0"
   }
 }
