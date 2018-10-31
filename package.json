@@ -10,7 +10,7 @@
     "server": "node server.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.16.4",
     "minimist": "^1.2.0",
