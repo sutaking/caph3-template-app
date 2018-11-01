@@ -38,27 +38,27 @@ var myApp = angular
 
         switch (e) {
             case 'version':
-                var version = window.webapis.audiocapture.getVersion();
+                //var version = window.webapis.audiocapture.getVersion();
                 log("The plugin version is : " + version);             
                 break;
             case 'add':
                 toggle(true);
                 log("Before invoke addAudioBufferListener");
-                window.webapis.audiocapture.removeAudioBufferListener(listenerID);
-                listenerID = window.webapis.audiocapture.addAudioBufferListener(getAudioBuffer);
+                //window.webapis.audiocapture.removeAudioBufferListener(listenerID);
+                //listenerID = window.webapis.audiocapture.addAudioBufferListener(getAudioBuffer);
                 log("The Audio Buffer Listener ID is : ~~~" + listenerID);
                 break;
             case 'start':
-                window.webapis.audiocapture.startCapture();
+                //window.webapis.audiocapture.startCapture();
                 log("You click the start button");
                 break;
             case 'stop':
-                window.webapis.audiocapture.stopCapture();
+                //window.webapis.audiocapture.stopCapture();
 		        log("You click the stop button");
                 break;
             case 'remove':
                 toggle(false);                
-                window.webapis.audiocapture.removeAudioBufferListener(listenerID);
+                //window.webapis.audiocapture.removeAudioBufferListener(listenerID);
                 log("RemoveAudioBufferListener will be invoked~");
                 break;
             case 'play':
@@ -68,8 +68,10 @@ var myApp = angular
                 log('-------- start Timing ------------');
                 t1 = performance.now();
                 log(`Play click: ${t1.toFixed(2)}`);
-                audio.src = './audio.mp3';
-                audio.play();
+                //audio.src = './audio.mp3';
+                //audio.play();
+                
+                ws.send('start');
                 break;
             default:
                 return;
@@ -83,6 +85,8 @@ var player;
 var isCanvas, isFeed = false;
 var t1, t2, t3, t4;
 
+var myWorker, ws;
+
 window.onload = function () {
     // TODO:: Do your initialization job
 
@@ -92,12 +96,39 @@ window.onload = function () {
 	player = new PCMPlayer({
 		encoding: '16bitInt',
 		channels: 2,
-		sampleRate: 44100,
+		sampleRate: 44100,//
 		flushingTime: 100
 	});
 
-    window.webapis.audiocapture.getVersion();
+    //window.webapis.audiocapture.getVersion();
+    const url = 'ws://109.123.120.200:5000';
+    ws = new WebSocket(url);
+    ws.binaryType = 'arraybuffer';
+    ws.addEventListener('open', event => (console.log(`[${new Date()}] ws server open sucess!`)));
+    ws.addEventListener('close', event => (console.log(`[${new Date()}] ws server closed!`)));
+    ws.addEventListener('message', event => {
+        /*var isFeed = false;
+        if(!isFeed) {
+            console.log(`feed data: ${performance.now()}`);
+            isFeed = true;
+        }*/
+        
+        let raw = new Uint8Array(event.data);
+        myWorker.postMessage(raw);
+        //player.feed(raw);
+    });
 
+    myWorker = new Worker('js/worker.js');
+
+    myWorker.onmessage = function(e) {
+        //result.textContent = e.data;
+        //console.log(`Message received from worker ${e.data}`);
+        //player.feed(e.data);
+        //console.log(e.data[0]);
+        player.testFlush(e.data);
+        
+    }
+    
 };
 
 //for printing log
@@ -118,7 +149,8 @@ function getAudioBuffer(data) {
     //console.log(`${ (performance.now()-c1).toFixed()} ms`);
     //console.log("getAudioBuffer~~~~~~~~~~~~~~~~~~  data:[" + data.byteLength + "]");
     var audiodata = new Uint16Array(data);
-    player.feed(audiodata);
+    //player.feed(audiodata);
+    myWorker.postMessage(audiodata);
     //c1 = performance.now();
 }
 
