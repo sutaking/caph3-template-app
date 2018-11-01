@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 
 const port = 9900;
-const appPath = path.normalize(`${__dirname}/app`);
+const appPath = path.normalize(`${__dirname}/app-worker`);
 
 app.use(serveStatic(appPath));
 

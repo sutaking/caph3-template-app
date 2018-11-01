@@ -174,9 +174,9 @@ var myDuration = 0;
 PCMPlayer.prototype.testFlush = function(samples) {
     //console.log(`channel: 0, data:${samples}`);
 
-    if (!samples.length) return;
+    if (!samples[0].length) return;
 
-    var length = samples.length / this.option.channels;
+    var length = samples[0].length;// / this.option.channels;
 
     var audioBuffer = this.audioCtx.createBuffer(this.option.channels, length, this.option.sampleRate),
         audioData,
@@ -189,37 +189,34 @@ PCMPlayer.prototype.testFlush = function(samples) {
     for (channel = 0; channel < this.option.channels; channel++) {
         audioData = audioBuffer.getChannelData(channel);
         
-        offset = channel;
-        for (i = 0; i < length; i++) {
-            audioData[i] = samples[offset];
+        //offset = channel;
+        /*for (i = 0; i < length; i++) {
+            audioData[i] = samples[i];
             offset += this.option.channels;
-        }       
+        }*/
+        audioData.set(samples[channel], 0);
     }
     //console.log(`channel: 0, data:${audioData1}`);
 
     this.bufferSource = this.audioCtx.createBufferSource();
     this.bufferSource.connect(analyser);
-    analyser.connect(this.audioCtx.destination);
+    //analyser.connect(this.audioCtx.destination);
     this.bufferSource.loop = false;
     this.bufferSource.buffer = audioBuffer;
-    console.log(`len: ${samples.length} decode execute time: ${performance.now() - tt1}`);
+    //console.log(`myDuration: ${myDuration} decode execute time: ${performance.now() - tt1}`);
     this.bufferSource.start(myDuration);
     myDuration = myDuration + audioBuffer.duration;
 
 };
 
+//var cx1;
 PCMPlayer.prototype.drawMeter = function() {
+    //console.log(`${ (performance.now()-cx1).toFixed()} ms`);
     const array = new Uint8Array(analyser.frequencyBinCount); //采样频率
     analyser.getByteFrequencyData(array);
     Context.clearRect(0, 0, width, height);
     for (var i = 0; i < array.length; i++) {
         var value = array[i];
-        if (isCanvas && value > 0) {
-            t4 = performance.now()
-            log(`drawMeter analyser: ${t4.toFixed(2)}, timing: ${(t4-t3).toFixed(2)}`);
-            isCanvas = false;
-            t3 = 0;
-        }
         if (capYPositionArray.length < array.length) {
             capYPositionArray.push(value);
         }
@@ -234,5 +231,6 @@ PCMPlayer.prototype.drawMeter = function() {
         Context.fillRect(i, height - value, 1, height);
     }
     setTime = requestAnimationFrame(PCMPlayer.prototype.drawMeter);
-    delete array;
+    //cx1 = performance.now();
+    //delete array;
 };
