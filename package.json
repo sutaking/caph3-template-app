@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "config": {
+    "path": "app",
+    "targetIP": "109.123.121.93"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": " node dev.js build",
-    "launch": " node dev.js launch",
+    "build": " node dev.js build npm_package_config_path",
+    "launch": " node dev.js launch npm_package_config_targetIP",
     "server": "node server.js"
   },
   "author": "",
@@ -15,6 +18,6 @@
     "express": "^4.16.4",
     "minimist": "^1.2.0",
     "serve-static": "^1.13.2",
-    "tizen-tv-dev-cli": "^0.1.0"
+    "tizen-tv-dev-cli": "file:../tizen-tv-dev-cli"
   }
 }

@@ -6,12 +6,12 @@ const cli = require('tizen-tv-dev-cli');
 const args = minimist(process.argv.slice(2));
 
 // const value
+const appName = process.env.npm_package_config_path;
 const argv = args._[0];
-const appPath = path.normalize(`${__dirname}/app`);
+const appPath = path.normalize(`${__dirname}/${appName}`);
+
 
 (function(){
-    console.log(`arg: ${argv}`);
-    console.log(appPath);
 
     switch(argv) {
         case 'build':
@@ -24,7 +24,7 @@ const appPath = path.normalize(`${__dirname}/app`);
             break;
     }
 
-})()
+})();
 
 
 
